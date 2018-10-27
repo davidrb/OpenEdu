@@ -5,6 +5,13 @@ export const CHANGE_USER = "CHANGE_USER";
 export const ERROR = "ERROR";
 export const CLEAR_ERROR = "CLEAR_ERROR";
 
+export function logout() {
+  return dispatch => {
+    delete axios.defaults.headers.common['Authorization'];
+    dispatch({type: LOGOUT});
+  };
+}
+
 export function login(email, password) {
   return dispatch => {
     return axios.post(
@@ -13,7 +20,7 @@ export function login(email, password) {
     )
     .then(res => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.jwt;
-      axios.get('http://localhost:3000/secret')
+      axios.get('http://localhost:3000/user')
            .then(res => dispatch({ type: CHANGE_USER, user: res.data.username }));
       },
       err => {
